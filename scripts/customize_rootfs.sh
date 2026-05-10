@@ -11,9 +11,8 @@ apk add bash openrc busybox curl git nano openssh-client htop blkid linux-virt s
     fzf bat eza zoxide neofetch ncurses sudo util-linux
 
 # Copy PENOS System Features
-# We assume the build script copies the 'src/system' folder into the rootfs at /tmp/system
 cp -r /tmp/system/bin/* /usr/local/bin/
-chmod +x /usr/local/bin/pen-*
+chmod +x /usr/local/bin/pen*
 mkdir -p /etc/penos
 cp -r /tmp/system/etc/* /etc/penos/
 cp -r /tmp/system/skel/.* /root/
