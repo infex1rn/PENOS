@@ -1,101 +1,126 @@
 :root {
-  --sidebar-width: 280px;
-  --header-height: 60px;
-  --bg: #ffffff;
-  --sidebar-bg: #f8f9fa;
-  --border: #e5e7eb;
-  --text-main: #1f2937;
-  --text-muted: #6b7280;
-  --primary: #2563eb;
-  --code-bg: #f3f4f6;
-}
-
-[data-theme='dark'] {
-  --bg: #0f172a;
-  --sidebar-bg: #1e293b;
-  --border: #334155;
-  --text-main: #f1f5f9;
-  --text-muted: #94a3b8;
-  --code-bg: #000000;
+  --ubuntu-aubergine: #772953;
+  --ubuntu-orange: #E95420;
+  --ubuntu-warm-grey: #AEA79F;
+  --text-dark: #333333;
+  --bg-light: #f7f7f7;
+  --border: #dbdbdb;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text-main);
-  background: var(--bg);
+  font-family: "Ubuntu", -apple-system, sans-serif;
+  color: var(--text-dark);
+  background: white;
+  line-height: 1.6;
 }
 
-.layout {
+.nav-bar {
+  border-top: 4px solid var(--ubuntu-orange);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.nav-content {
   display: flex;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.sidebar {
-  width: var(--sidebar-width);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--border);
-  padding: 2rem 1.5rem;
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.main-content {
-  margin-left: var(--sidebar-width);
-  flex: 1;
-  padding: 3rem 4rem;
-  max-width: 800px;
-}
-
-.nav-item {
-  display: block;
-  padding: 0.5rem 0;
-  color: var(--text-main);
+.nav-links a {
+  margin-left: 2rem;
   text-decoration: none;
-  font-size: 0.95rem;
-  border-radius: 4px;
+  color: var(--text-dark);
+  font-weight: 400;
 }
 
-.nav-item:hover {
-  color: var(--primary);
+.nav-links a:hover {
+  color: var(--ubuntu-orange);
 }
 
-.nav-header {
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin: 1.5rem 0 0.5rem;
+.hero {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, var(--ubuntu-aubergine) 0%, #2c001e 100%);
+  color: white;
 }
 
-h1 { font-size: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-h2 { font-size: 1.75rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-
-code {
-  background: var(--code-bg);
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-family: ui-monospace, monospace;
-  font-size: 0.9em;
+.hero h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  font-weight: 300;
 }
 
-pre {
-  background: var(--code-bg);
-  padding: 1rem;
-  border-radius: 8px;
-  overflow-x: auto;
-  border: 1px solid var(--border);
+.hero p {
+  font-size: 1.5rem;
+  font-weight: 300;
+  opacity: 0.9;
+  max-width: 700px;
 }
 
-.download-btn {
-  background: var(--primary);
+.section {
+  padding: 4rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-orange {
+  background: var(--ubuntu-orange);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 6px;
   text-decoration: none;
-  font-weight: 600;
   display: inline-block;
-  margin: 1rem 0;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.btn-orange:hover {
+  background: #c74316;
+}
+
+/* Download Page */
+.download-card {
+  background: var(--bg-light);
+  padding: 3rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.req-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.req-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer {
+  background: #333;
+  color: white;
+  padding: 3rem 0;
+  margin-top: 4rem;
 }
