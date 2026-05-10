@@ -1,0 +1,9 @@
+# Build artifacts
+build/
+*.tar.gz
+*.squashfs
+*.img
+
+# Out directory (except the ISO if we want to track it specifically)
+# out/*
+# !out/penos.iso
