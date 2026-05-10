@@ -1,6 +1,11 @@
+# Build artifacts
 build/
 out/
 *.tar.gz
 *.squashfs
 *.img
-*.xz
+*.iso
+
+# Logs and temp files
+*.log
+tmp/
