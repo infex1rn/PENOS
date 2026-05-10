@@ -1,0 +1,12 @@
+#!/bin/bash
+# PENOS Command Guide
+echo -e "\e[1;32mPENOS COMMANDS\e[0m"
+echo "----------------"
+echo "pen install <pkg>  - Install packages"
+echo "pen update         - Update system (OTA)"
+echo "pen-fetch          - System info"
+echo "pen-config         - Configure OS"
+echo "pen-doctor         - Fix system issues"
+echo "pen-theme          - Change UI look"
+echo "pen-backup         - Backup your data"
+echo "pen-storage        - Manage disk space"

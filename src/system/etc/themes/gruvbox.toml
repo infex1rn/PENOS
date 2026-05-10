@@ -1,0 +1,6 @@
+# Gruvbox theme for Starship
+[directory]
+style = "bold #d65d0e"
+[character]
+success_symbol = "[»](bold #b8bb26)"
+error_symbol = "[»](bold #fb4934)"

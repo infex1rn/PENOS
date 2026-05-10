@@ -1,0 +1,12 @@
+#!/bin/bash
+# PENOS Theme Switcher
+THEME_DIR="/etc/penos/themes"
+echo "Available Themes:"
+ls $THEME_DIR
+read -p "Select theme: " theme
+if [ -f "$THEME_DIR/$theme" ]; then
+    cp "$THEME_DIR/$theme" /root/.starship.toml
+    echo "Theme $theme applied."
+else
+    echo "Theme not found."
+fi

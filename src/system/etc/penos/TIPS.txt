@@ -1,0 +1,6 @@
+PENOS TIPS & TRICKS:
+- Use 'pen update' to get the latest OS fixes.
+- Your data in /storage survives every update.
+- 'pen-fetch' gives you a cool system overview.
+- Customize your prompt in /root/.starship.toml.
+- Install 'python3' or 'nodejs' using 'pen install'.

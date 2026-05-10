@@ -1,0 +1,12 @@
+# Starship theme for PENOS
+format = """
+[┌](bold white)$directory$git_branch$git_status
+[└](bold white)$character"""
+
+[directory]
+style = "bold blue"
+truncate_to_repo = false
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"

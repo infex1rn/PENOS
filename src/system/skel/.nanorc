@@ -1,0 +1,7 @@
+# Nano configuration for PENOS
+set backup
+set linenumbers
+set mouse
+set smooth
+set constantshow
+include "/usr/share/nano/*.nanorc"

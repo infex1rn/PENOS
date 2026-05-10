@@ -1,0 +1,9 @@
+#!/bin/bash
+# PENOS System Doctor - Repairs common issues
+echo "Running PENOS Diagnostics..."
+echo -n "[1/3] Checking storage... "
+if mount | grep -q "/storage"; then echo "OK"; else echo "NOT MOUNTED"; fi
+echo -n "[2/3] Checking network... "
+if ping -c 1 8.8.8.8 >/dev/null 2>&1; then echo "OK"; else echo "FAILED"; fi
+echo -n "[3/3] Checking apk repositories... "
+if [ -f /etc/apk/repositories ]; then echo "OK"; else echo "MISSING"; fi

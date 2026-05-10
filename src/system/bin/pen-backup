@@ -1,0 +1,6 @@
+#!/bin/bash
+# PENOS Storage Backup
+BACKUP_FILE="/storage/backup-$(date +%Y%m%d).tar.gz"
+echo "Backing up projects and scripts to $BACKUP_FILE..."
+tar -czf "$BACKUP_FILE" /root/projects /root/scripts
+echo "Done."

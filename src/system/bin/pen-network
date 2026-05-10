@@ -1,0 +1,14 @@
+#!/bin/bash
+# PENOS Network Manager
+echo "=== PENOS Network Management ==="
+echo "Interface Status:"
+ip -br link
+echo "IP Addresses:"
+ip -br addr
+echo "1) DHCP Renew"
+echo "2) Ping Test"
+read -p "Select: " opt
+case $opt in
+    1) udhcpc -i eth0;;
+    2) ping -c 3 8.8.8.8;;
+esac

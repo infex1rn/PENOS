@@ -1,0 +1,6 @@
+# Tokyo Night theme for Starship
+[directory]
+style = "bold #7aa2f7"
+[character]
+success_symbol = "[λ](bold #bb9af7)"
+error_symbol = "[λ](bold #f7768e)"

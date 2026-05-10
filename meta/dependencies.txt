@@ -1,0 +1,14 @@
+xorriso
+squashfs-tools
+qemu-user-static
+qemu-system-arm
+mtools
+grub-efi-arm64-bin
+cpio
+curl
+gzip
+dd
+lsblk
+awk
+sed
+bash

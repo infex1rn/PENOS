@@ -1,0 +1,6 @@
+# Dracula theme for Starship
+[directory]
+style = "bold #bd93f9"
+[character]
+success_symbol = "[❯](bold #50fa7b)"
+error_symbol = "[❯](bold #ff5555)"

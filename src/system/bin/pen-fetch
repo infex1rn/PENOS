@@ -1,0 +1,20 @@
+#!/bin/bash
+# PENOS System Information Fetcher
+VERSION=$(cat /etc/penos-version 2>/dev/null || echo "v0.1.0")
+UPTIME=$(uptime -p)
+PACKAGES=$(apk info | wc -l)
+MEMORY=$(free -m | awk '/Mem:/ { print $3 "MB / " $2 "MB" }')
+
+echo -e "\e[1;34m      ____  _______   ______  _____ \e[0m"
+echo -e "\e[1;34m     / __ \/ ____/ | / / __ \/ ___/ \e[0m"
+echo -e "\e[1;34m    / /_/ / __/ /  |/ / / / /\__ \  \e[0m"
+echo -e "\e[1;34m   / ____/ /___/ /|  / /_/ /___/ /  \e[0m"
+echo -e "\e[1;34m  /_/   /_____/_/ |_/\____//____/   \e[0m"
+echo -e ""
+echo -e "\e[1;34mOS:\e[0m PENOS $VERSION"
+echo -e "\e[1;34mHost:\e[0m iOS Virtual Machine (UTM)"
+echo -e "\e[1;34mKernel:\e[0m $(uname -r)"
+echo -e "\e[1;34mUptime:\e[0m $UPTIME"
+echo -e "\e[1;34mPackages:\e[0m $PACKAGES (apk)"
+echo -e "\e[1;34mShell:\e[0m $SHELL"
+echo -e "\e[1;34mMemory:\e[0m $MEMORY"

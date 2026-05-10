@@ -1,0 +1,7 @@
+PENOS v0.1.0 "Portable Edition"
+-----------------------------
+- Initial release for UTM SE.
+- ARM64 optimized kernel (linux-virt).
+- OTA update system via Cloudflare R2.
+- Terminal-first UX with Starship.
+- Automatic persistence mounting.

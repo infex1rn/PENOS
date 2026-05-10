@@ -1,0 +1,15 @@
+#!/bin/bash
+# PENOS Interactive System Configuration
+echo "=== PENOS System Configuration ==="
+echo "1) Change Hostname"
+echo "2) Change Timezone"
+echo "3) Reset Shell Theme"
+echo "4) Exit"
+read -p "Select an option: " opt
+
+case $opt in
+    1) read -p "New hostname: " hn; echo "$hn" > /etc/hostname; hostname "$hn";;
+    2) setup-timezone;;
+    3) rm /root/.starship.toml;;
+    *) exit 0;;
+esac

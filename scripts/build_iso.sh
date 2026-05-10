@@ -43,6 +43,8 @@ setup_qemu
 # Customize RootFS
 echo "Customizing RootFS..."
 sudo cp /etc/resolv.conf "${ROOTFS_DIR}/etc/resolv.conf"
+sudo mkdir -p "${ROOTFS_DIR}/tmp/system"
+sudo cp -r src/system/* "${ROOTFS_DIR}/tmp/system/"
 sudo cp scripts/customize_rootfs.sh "${ROOTFS_DIR}/customize.sh"
 sudo chmod +x "${ROOTFS_DIR}/customize.sh"
 sudo chroot "${ROOTFS_DIR}" /bin/sh /customize.sh

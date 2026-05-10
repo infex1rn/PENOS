@@ -1,0 +1,18 @@
+#!/bin/bash
+# PENOS Persistence Mounter
+DISK="/dev/vdb"
+MOUNT_POINT="/storage"
+
+if [ -b "$DISK" ]; then
+    mkdir -p $MOUNT_POINT
+    # Check if formatted
+    if ! blkid $DISK > /dev/null; then
+        echo "Formatting $DISK as ext4..."
+        mkfs.ext4 $DISK
+    fi
+    mount $DISK $MOUNT_POINT
+    echo "Persistent storage mounted at $MOUNT_POINT"
+else
+    echo "Persistence disk $DISK not found."
+    exit 1
+fi
