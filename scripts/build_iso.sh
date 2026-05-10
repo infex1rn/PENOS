@@ -84,13 +84,32 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t devtmpfs devtmpfs /dev
 
-echo "Searching for PENOS squashfs..."
-# Try to find the device with penos.squashfs
-# In UTM/QEMU, the CDROM is usually /dev/sr0 or /dev/vda
-for dev in /dev/sr0 /dev/vda /dev/vdb; do
+echo "Checking for PENOS persistence and updates..."
+# Try to mount the persistent storage disk (/dev/vdb)
+mkdir -p /mnt/storage
+if mount /dev/vdb /mnt/storage 2>/dev/null; then
+    if [ -f /mnt/storage/update/penos.squashfs ]; then
+        echo ">>> OTA Update Found: Loading system from persistent storage..."
+        if mount -t squashfs -o loop /mnt/storage/update/penos.squashfs /root; then
+            echo "Update mounted successfully."
+            # Move the storage mount to the new rootfs so it's ready after switch_root
+            mkdir -p /root/storage
+            mount --move /mnt/storage /root/storage
+            echo "Switching to updated rootfs..."
+            exec switch_root /root /sbin/init
+        else
+            echo "!!! ERROR: Failed to mount update. Falling back to ISO..."
+        fi
+    fi
+    umount /mnt/storage
+fi
+
+echo "Searching for PENOS squashfs on ISO..."
+# Fallback: Search for the device with penos.squashfs (ISO)
+for dev in /dev/sr0 /dev/vda; do
     if mount -r $dev /mnt/iso 2>/dev/null; then
         if [ -f /mnt/iso/penos.squashfs ]; then
-            echo "Found squashfs on $dev"
+            echo "Found base system on $dev"
             break
         fi
         umount /mnt/iso
@@ -98,13 +117,13 @@ for dev in /dev/sr0 /dev/vda /dev/vdb; do
 done
 
 if [ ! -f /mnt/iso/penos.squashfs ]; then
-    echo "Could not find penos.squashfs!"
+    echo "!!! CRITICAL ERROR: Could not find any PENOS system image!"
     sh
 fi
 
 mount -t squashfs -o loop /mnt/iso/penos.squashfs /root
 
-echo "Switching to rootfs..."
+echo "Switching to base rootfs..."
 exec switch_root /root /sbin/init
 EOF
     chmod +x init
