@@ -19,10 +19,12 @@ The fastest and lightest persistent Linux environment for iOS virtualization. PE
 - **Persistence:** qcow2 virtual disk support
 
 ## 📦 Getting Started
-1. Download the latest `penos.iso` from the releases or build it yourself.
+1. Download the latest `penos.iso` from the [Official Download Page](https://penos.indevstudio.dev/download/release/).
 2. Import the ISO into UTM SE on iOS.
 3. Add a secondary drive (virtio) for persistent storage.
 4. Boot and enjoy "Terminal Freedom for iOS."
+
+For more information, visit [penos.indevstudio.dev](https://penos.indevstudio.dev).
 
 ## 🔨 Building
 To build PENOS from source on an Ubuntu/Debian host:

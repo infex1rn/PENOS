@@ -38,6 +38,7 @@ cat << 'EOF' > /usr/local/bin/pen
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
+UPDATE_URL="https://update.pen.indevstudio.dev"
 
 case "$1" in
     install)
@@ -51,11 +52,14 @@ case "$1" in
         apk del "$@"
         ;;
     update)
-        echo -e "${BLUE}累 Updating system...${NC}"
+        echo -e "${BLUE}累 Updating package index...${NC}"
         apk update && apk upgrade
+        echo -e "${BLUE}累 Checking for PENOS system updates at ${UPDATE_URL}...${NC}"
+        # System update logic placeholder
         ;;
     *)
         echo -e "${GREEN}PENOS PORTABLE TERMINAL${NC}"
+        echo "Website: https://penos.indevstudio.dev"
         echo "Usage: pen [install|remove|update] [packages]"
         ;;
 esac
