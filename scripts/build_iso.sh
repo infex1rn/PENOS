@@ -54,7 +54,8 @@ create_squashfs() {
     echo "Creating squashfs image..."
     sudo apt install -y squashfs-tools
     sudo rm -f "${WORKDIR}/penos.squashfs"
-    sudo mksquashfs "${ROOTFS_DIR}" "${WORKDIR}/penos.squashfs" -comp xz -e usr/bin/qemu-aarch64-static
+    # Use more aggressive compression and arm64 filters
+    sudo mksquashfs "${ROOTFS_DIR}" "${WORKDIR}/penos.squashfs" -comp xz -Xbcj arm64 -e usr/bin/qemu-aarch64-static
 }
 
 # Prepare ISO structure
@@ -70,48 +71,48 @@ prepare_iso() {
     # Create a simple initramfs
     echo "Creating custom initramfs..."
     INITRAMFS_WORKDIR="${WORKDIR}/initramfs_content"
-    rm -rf "${INITRAMFS_WORKDIR}"
-    mkdir -p "${INITRAMFS_WORKDIR}"
-    cd "${INITRAMFS_WORKDIR}"
-    mkdir -p bin dev proc sys mnt/iso root
-    # Copy busybox
-    cp "${ROOTFS_DIR}/bin/busybox" bin/
-    ln -sf busybox bin/sh
-    ln -sf busybox bin/mount
-    ln -sf busybox bin/switch_root
+    sudo rm -rf "${INITRAMFS_WORKDIR}"
+    sudo mkdir -p "${INITRAMFS_WORKDIR}"
     
-    cat << 'EOF' > init
+    sudo bash -c "cd ${INITRAMFS_WORKDIR} && \
+    mkdir -p bin dev proc sys mnt/iso root && \
+    cp ${ROOTFS_DIR}/bin/busybox bin/ && \
+    ln -sf busybox bin/sh && \
+    ln -sf busybox bin/mount && \
+    ln -sf busybox bin/switch_root"
+    
+    sudo bash -c "cat << 'EOF' > ${INITRAMFS_WORKDIR}/init
 #!/bin/sh
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t devtmpfs devtmpfs /dev
 
-echo "Checking for PENOS persistence and updates..."
+echo \"Checking for PENOS persistence and updates...\"
 # Try to mount the persistent storage disk (/dev/vdb)
 mkdir -p /mnt/storage
 if mount /dev/vdb /mnt/storage 2>/dev/null; then
     if [ -f /mnt/storage/update/penos.squashfs ]; then
-        echo ">>> OTA Update Found: Loading system from persistent storage..."
+        echo \">>> OTA Update Found: Loading system from persistent storage...\"
         if mount -t squashfs -o loop /mnt/storage/update/penos.squashfs /root; then
-            echo "Update mounted successfully."
+            echo \"Update mounted successfully.\"
             # Move the storage mount to the new rootfs so it's ready after switch_root
             mkdir -p /root/storage
             mount --move /mnt/storage /root/storage
-            echo "Switching to updated rootfs..."
+            echo \"Switching to updated rootfs...\"
             exec switch_root /root /sbin/init
         else
-            echo "!!! ERROR: Failed to mount update. Falling back to ISO..."
+            echo \"!!! ERROR: Failed to mount update. Falling back to ISO...\"
         fi
     fi
     umount /mnt/storage
 fi
 
-echo "Searching for PENOS squashfs on ISO..."
+echo \"Searching for PENOS squashfs on ISO...\"
 # Fallback: Search for the device with penos.squashfs (ISO)
 for dev in /dev/sr0 /dev/vda; do
-    if mount -r $dev /mnt/iso 2>/dev/null; then
+    if mount -r \$dev /mnt/iso 2>/dev/null; then
         if [ -f /mnt/iso/penos.squashfs ]; then
-            echo "Found base system on $dev"
+            echo \"Found base system on \$dev\"
             break
         fi
         umount /mnt/iso
@@ -119,29 +120,28 @@ for dev in /dev/sr0 /dev/vda; do
 done
 
 if [ ! -f /mnt/iso/penos.squashfs ]; then
-    echo "!!! CRITICAL ERROR: Could not find any PENOS system image!"
+    echo \"!!! CRITICAL ERROR: Could not find any PENOS system image!\"
     sh
 fi
 
 mount -t squashfs -o loop /mnt/iso/penos.squashfs /root
 
-echo "Switching to base rootfs..."
+echo \"Switching to base rootfs...\"
 exec switch_root /root /sbin/init
-EOF
-    chmod +x init
-    find . | cpio -H newc -o | gzip > "${ISO_DIR}/boot/initramfs"
-    cd -
+EOF"
+    sudo chmod +x "${INITRAMFS_WORKDIR}/init"
+    sudo bash -c "cd ${INITRAMFS_WORKDIR} && find . | cpio -H newc -o | gzip > ${ISO_DIR}/boot/initramfs"
 
     # Create GRUB configuration
-    cat << 'EOF' > "${ISO_DIR}/boot/grub/grub.cfg"
+    sudo bash -c "cat << 'EOF' > ${ISO_DIR}/boot/grub/grub.cfg
 set default=0
 set timeout=1
 
-menuentry "PENOS" {
+menuentry \"PENOS\" {
     linux /boot/vmlinuz quiet
     initrd /boot/initramfs
 }
-EOF
+EOF"
 }
 
 create_iso() {
@@ -155,16 +155,16 @@ create_iso() {
     sudo cp "${ROOTFS_DIR}/tmp/bootaa64.efi" "${ISO_DIR}/boot/grub/bootaa64.efi"
     
     # Create a small FAT image for EFI
-    mkdir -p "${WORKDIR}/efi_img/EFI/BOOT"
-    cp "${ISO_DIR}/boot/grub/bootaa64.efi" "${WORKDIR}/efi_img/EFI/BOOT/BOOTAA64.EFI"
-    dd if=/dev/zero of="${WORKDIR}/efiboot.img" bs=1M count=10
-    mkfs.vfat "${WORKDIR}/efiboot.img"
-    mcopy -i "${WORKDIR}/efiboot.img" -s "${WORKDIR}/efi_img/EFI" ::
+    sudo mkdir -p "${WORKDIR}/efi_img/EFI/BOOT"
+    sudo cp "${ISO_DIR}/boot/grub/bootaa64.efi" "${WORKDIR}/efi_img/EFI/BOOT/BOOTAA64.EFI"
+    sudo dd if=/dev/zero of="${WORKDIR}/efiboot.img" bs=1M count=10
+    sudo mkfs.vfat "${WORKDIR}/efiboot.img"
+    sudo mcopy -i "${WORKDIR}/efiboot.img" -s "${WORKDIR}/efi_img/EFI" ::
     
     # Copy efiboot.img to ISO dir so xorriso can find it
-    cp "${WORKDIR}/efiboot.img" "${ISO_DIR}/boot/grub/efiboot.img"
+    sudo cp "${WORKDIR}/efiboot.img" "${ISO_DIR}/boot/grub/efiboot.img"
 
-    xorriso -as mkisofs \
+    sudo xorriso -as mkisofs \
         -R -l \
         -eltorito-boot boot/grub/efiboot.img \
         -no-emul-boot \
